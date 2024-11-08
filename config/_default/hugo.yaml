@@ -1,0 +1,11 @@
+baseURL: "localhost"
+title: Paolo's Blog
+copyright: "2024 © Made with :blue_heart: in Sardinia"
+theme: [PaperMod]
+languageCode: en-gb
+publishDir: "docs"
+
+pagination:
+  disableAliases: false
+  pagerSize: 5
+  path: page
