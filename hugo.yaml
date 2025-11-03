@@ -8,3 +8,6 @@ buildDrafts: false
 buildFuture: false
 buildExpired: false
 
+caches:
+  images:
+    dir: :cacheDir/images
