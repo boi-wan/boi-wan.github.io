@@ -11,3 +11,17 @@ buildExpired: false
 caches:
   images:
     dir: :cacheDir/images
+
+params:
+  disableAnchoredHeadings: true
+
+  homeInfoParams:
+    Title: Hi there! 👋
+    Content: My name is Paolo and this blog is work in progress.
+      Feel free to reach out!
+
+  socialIcons:
+    - name: github
+      url: "https://github.com/boi-wan"
+    - name: linkedin
+      url: "https://linkedin.com/in/paoloboi"
