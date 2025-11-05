@@ -12,6 +12,7 @@ body {
 /* Move theme toggle to the right of header */
 .nav {
   position: relative;
+  line-height: normal;
 }
 
 .logo-switches {
@@ -23,4 +24,28 @@ body {
 /* Ensure menu doesn't overlap with theme toggle */
 #menu {
   margin-right: 60px;
+}
+
+.typed-out {
+  overflow: hidden;
+  border-right: 0.15em solid grey;
+  white-space: nowrap;
+  animation: typing 1.5s steps(13, end) forwards, blinking 1.05s infinite;
+  padding-right: 0.1em;
+}
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+@keyframes blinking {
+  from {
+    border-color: transparent;
+  }
+  to {
+    border-color: grey;
+  }
 }
