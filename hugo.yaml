@@ -1,6 +1,6 @@
 baseURL: https://example.org/
 languageCode: en-gb
-title: Paolo's Blog
+title: Paolo's blog
 theme: ["PaperMod"]
 
 enableRobotsTXT: true
@@ -17,7 +17,12 @@ params:
 
   homeInfoParams:
     Title: Hi there! 👋
-    Content: My name is Paolo and this blog is work in progress.
+    Content: >
+      My name is Paolo and this blog is work in progress.
+      Its aim is to share my thoughts on software development, technology,
+      and other topics that interest `me and me and me`.
+
+
       Feel free to reach out!
 
   socialIcons:
