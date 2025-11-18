@@ -1,3 +1,4 @@
+/* Typography */
 body {
   font-family: "Noto Sans", Georgia, "Times New Roman", serif;
   font-weight: 400;
@@ -12,13 +13,8 @@ body {
     Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
 }
 
-.header {
-  margin: auto;
-  max-width: calc(var(--main-width) + var(--gap) * 3);
-}
-
+/* PT Serif for content */
 .first-entry .entry-content {
-  /* margin: 14px 0; */
   font-size: 1.15rem;
   font-family: "PT Serif", Georgia, "Times New Roman", serif;
   font-weight: 400;
@@ -64,7 +60,7 @@ samp {
   font-family: "Noto Sans Mono", "Courier New", Courier, monospace;
 }
 
-/* Dark theme code blocks styling */
+/* Dark theme code blocks */
 :root[data-theme="dark"] code {
   background-color: rgba(255, 255, 255, 0.15);
 }
@@ -73,12 +69,23 @@ samp {
   background-color: rgba(255, 255, 255, 0.15);
 }
 
+/* Header layout */
+.header {
+  margin: auto;
+  max-width: calc(var(--main-width) + var(--gap) * 3);
+}
+
+.logo {
+  position: relative;
+  line-height: normal;
+}
+
 /* Hide theme toggle from header */
 .logo-switches {
   display: none;
 }
 
-/* Style theme toggle in footer */
+/* Theme toggle in footer */
 .footer #theme-toggle {
   display: inline-flex;
   align-items: center;
@@ -90,17 +97,6 @@ samp {
   margin-left: 10px;
 }
 
-.logo {
-  position: relative;
-  line-height: normal;
-}
-
-.logo-switches {
-  position: absolute;
-  right: var(--gap);
-  top: 0;
-}
-
 /* Typing animation for logo */
 .typed-out {
   overflow: hidden;
@@ -109,6 +105,7 @@ samp {
   animation: typing 1.5s steps(13, end) forwards, blinking 1.05s infinite;
   padding-right: 0.1em;
 }
+
 @keyframes typing {
   from {
     width: 0;
@@ -117,6 +114,7 @@ samp {
     width: 100%;
   }
 }
+
 @keyframes blinking {
   from {
     border-color: transparent;
