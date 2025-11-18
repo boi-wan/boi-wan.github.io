@@ -2,6 +2,7 @@ baseURL: https://example.org/
 languageCode: en-gb
 title: Paolo's blog
 theme: ["PaperMod"]
+#copyright: "© 2025 Paolo's blog. All rights reserved."
 
 enableRobotsTXT: true
 buildDrafts: false
@@ -15,11 +16,19 @@ caches:
 params:
   disableAnchoredHeadings: true
 
+  footer:
+    text: "All rights reserved · Made in Sardinia with 💙"
+
   homeInfoParams:
     Title: Hi there! 👋
     Content: >
       My name is Paolo and this blog is work in progress.
-      Its aim is to share my thoughts on software development, technology,
+
+
+      I am a 10+ years software engineer, currently working in a FinTech company.
+
+
+      I would like to share my thoughts on software engineering, technology, homelab
       and other topics that interest me.
 
 
