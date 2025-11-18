@@ -16,6 +16,13 @@ caches:
 params:
   disableAnchoredHeadings: true
 
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowReadingTime: true
+  ShowShareButtons: false
+  ShowToc: true
+
   footer:
     text: "All rights reserved · Made in Sardinia with 💙"
 
@@ -23,11 +30,7 @@ params:
     Title: Hi there! 👋
     Content: >
       My name is Paolo and this blog is work in progress.
-
-
-      I am a 10+ years software engineer, currently working in a FinTech company.
-
-
+      I am a 10+ years software engineer, currently working in a Fintech company.
       I would like to share my thoughts on software engineering, technology, homelab
       and other topics that interest me.
 
@@ -39,3 +42,10 @@ params:
       url: "https://github.com/boi-wan"
     - name: linkedin
       url: "https://linkedin.com/in/paoloboi"
+
+menu:
+  main:
+    - identifier: posts
+      name: Posts
+      url: /posts/
+      weight: 10
