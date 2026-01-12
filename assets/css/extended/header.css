@@ -1,0 +1,15 @@
+/* Header layout */
+.header {
+  margin: auto;
+  max-width: calc(var(--main-width) + var(--gap) * 3);
+}
+
+.logo {
+  position: relative;
+  line-height: normal;
+}
+
+/* Hide theme toggle from header */
+.logo-switches {
+  display: none;
+}

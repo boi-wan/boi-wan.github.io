@@ -1,0 +1,42 @@
+/* Typography */
+body {
+    font-family: 'Noto Sans', Roboto, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    word-break: break-word;
+    background: var(--theme);
+}
+
+/* content */
+.first-entry .entry-header h1 {
+  font-family: "PT Serif", serif;
+}
+.first-entry .entry-content {
+  font-family: "PT Serif", serif;
+  font-size: 1.20rem;
+}
+
+/* footer */
+.footer, .top-link {
+    font-size: 14px;
+    color: var(--secondary);
+}
+
+/* logo */
+.logo a {
+    font-size: 26px;
+}
+
+/* menu */
+#menu a {
+    font-size: 18px;
+}
+
+/* Dark theme code blocks */
+:root[data-theme="dark"] code {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+:root[data-theme="dark"] pre {
+  background-color: rgba(255, 255, 255, 0.15);
+}
