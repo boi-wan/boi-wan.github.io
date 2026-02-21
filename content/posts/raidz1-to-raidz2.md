@@ -17,7 +17,7 @@ In fact, the important thing to note is that RAIDZ1 can only tolerate the failur
 
 ## The workaround
 
-Luckily, there is a workaround that allows you to reshape the pool without needing to buy a completely new set of disks. The basics of the workaround are:
+Luckily, there is a workaround that unblocks reshaping the pool without needing to buy a completely new set of disks. The basics of the workaround are:
 
 - ensuring to have a backup of the data (!!!)
 - destroy the existing RAIDZ1 pool
@@ -25,10 +25,10 @@ Luckily, there is a workaround that allows you to reshape the pool without needi
 - copy the data from the backup to the new pool
 - once the data is copied, remove the fake disk(s) from the pool and replace them with the real disks (if you have more than 4 disks, you can add them one by one, replacing the fake disk(s) each time)
 
-This plan allows you to transition to RAIDZ2 without needing to have twice the storage space during the transition, but it does require some careful planning and execution. In particular, you need to ensure that you have a reliable backup of the data in case anything goes wrong.
+This plan allows the transition to RAIDZ2 without needing to have twice the storage space during the transition, but it does require some careful planning and execution. In particular, you need to ensure that you have a reliable backup of the data in case anything goes wrong.
 
 ## Backing up the data
 
-Before starting the transition, I made sure to have a backup of all the data on the RAIDZ1 pool. I used an single disk pool to store the backup, which was sufficient for my needs. If you are brave enough, you can use the new disk itself to store the backup, but I would not recommend it as it adds an extra layer of risk to the process.
+Before starting, I made sure to have a backup of all the data. I used a single disk pool to store the backup, which was sufficient for my needs. If you are brave enough, you can use the new disk itself to store the backup, but I would not recommend it as it adds an extra layer of risk to the process.
 
 ###
