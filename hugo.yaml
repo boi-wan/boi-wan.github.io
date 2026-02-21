@@ -18,6 +18,7 @@ params:
     name: "Paolo"
     email: ""
 
+  disableThemeToggle: true
   disableAnchoredHeadings: true
 
   ShowPostNavLinks: true
@@ -34,7 +35,7 @@ params:
     Title: Hi there! 👋
     Content: >
       I'm Paolo, and this blog is still very much a work in progress.
-      
+
 
       With over 10 years as a software engineer (currently at a fintech company), I'd love to share my thoughts on coding, tech, my homelab projects, and anything else that piques my interest.
 

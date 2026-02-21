@@ -8,8 +8,3 @@
   position: relative;
   line-height: normal;
 }
-
-/* Hide theme toggle from header */
-.logo-switches {
-  display: none;
-}

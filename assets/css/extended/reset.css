@@ -13,12 +13,14 @@ body {
 }
 .first-entry .entry-content {
   font-family: "Merriweather", Georgia, serif;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  line-height: 1.8rem;
 }
 
 .post-content {
   font-family: "Merriweather", Georgia, serif;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  line-height: 1.8rem;
 }
 
 /* footer */
