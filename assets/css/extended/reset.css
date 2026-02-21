@@ -16,6 +16,11 @@ body {
   font-size: 1.20rem;
 }
 
+.post-content {
+  font-family: "PT Serif", serif;
+  font-size: 1.20rem;
+}
+
 /* footer */
 .footer, .top-link {
     font-size: 14px;
