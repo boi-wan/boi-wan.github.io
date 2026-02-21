@@ -14,6 +14,10 @@ caches:
     dir: :cacheDir/images
 
 params:
+  author:
+    name: "Paolo"
+    email: ""
+
   disableAnchoredHeadings: true
 
   ShowPostNavLinks: true
