@@ -13,6 +13,13 @@ caches:
   images:
     dir: :cacheDir/images
 
+markup:
+  defaultMarkdownHandler: goldmark
+  goldmark:
+    parser:
+      attribute:
+        block: true
+
 params:
   author:
     name: "Paolo"
@@ -21,6 +28,7 @@ params:
   disableThemeToggle: true
   disableAnchoredHeadings: true
 
+  HideAuthor: true
   ShowPostNavLinks: true
   ShowBreadCrumbs: true
   ShowCodeCopyButtons: true

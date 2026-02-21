@@ -19,8 +19,9 @@ body {
 
 .post-content {
   font-family: "Merriweather", Georgia, serif;
-  font-size: 1.1rem;
+  font-size: medium;
   line-height: 1.8rem;
+  font-weight: lighter;
 }
 
 /* footer */
