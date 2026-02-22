@@ -29,7 +29,7 @@ pre,
 .highlight code,
 .post-content code {
   font-family: "Noto Sans Mono", "Courier New", Courier, monospace;
-  font-weight: bolder;
+  font-weight: 500;
 }
 
 /* footer */
@@ -55,6 +55,11 @@ pre,
   align-items: center;
   justify-content: center;
   padding: 4px;
+}
+
+div.highlight:hover .copy-code,
+pre:hover .copy-code {
+  display: inline-flex;
 }
 
 .copy-code svg {

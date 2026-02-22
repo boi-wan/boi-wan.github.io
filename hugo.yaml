@@ -16,7 +16,12 @@ caches:
 markup:
   defaultMarkdownHandler: goldmark
   highlight:
+    # anchorLineNos: true
+    codeFences: true
+    guessSyntax: true
     lineNos: true
+    noClasses: false
+    style: monokai
   goldmark:
     parser:
       attribute:
@@ -26,6 +31,9 @@ params:
   author:
     name: "Paolo"
     email: ""
+  params:
+    assets:
+      disableHLJS: true
 
   disableThemeToggle: true
   disableAnchoredHeadings: true
