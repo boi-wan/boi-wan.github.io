@@ -24,6 +24,14 @@ body {
   font-weight: lighter;
 }
 
+code,
+pre,
+.highlight code,
+.post-content code {
+  font-family: "Noto Sans Mono", "Courier New", Courier, monospace;
+  font-weight: bolder;
+}
+
 /* footer */
 .footer,
 .top-link {
@@ -41,11 +49,14 @@ body {
   font-size: 18px;
 }
 
-/* Dark theme code blocks */
-:root[data-theme="dark"] code {
-  background-color: rgba(255, 255, 255, 0.15);
+/* copy code button */
+.copy-code {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
 }
 
-:root[data-theme="dark"] pre {
-  background-color: rgba(255, 255, 255, 0.15);
+.copy-code svg {
+  pointer-events: none;
 }

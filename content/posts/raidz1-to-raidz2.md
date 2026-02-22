@@ -8,12 +8,23 @@ showReadingTime: true
 
 I have been running TrueNAS in my homelab for a while now. Recently, I decided to reshape the pools, both for better redundancy and to make better use of the disks I have available.
 
-The biggest pool I have is a RAIDZ1 pool with 3\*8TB disks. It was fitting my needs, until they changed. The pool initially did not contain any critical data (which are stored and backed up elsewhere), but I decided to reshape the pool to a RAIDZ2 (4\*8TB disks) for better covering the potential disk failures.
+The biggest pool I have is a RAIDZ1 with 3\*8TB disks. It was fitting my needs, until they changed. I started to have more data to store, and so I decided to move to 4\*8TB disks in RAIDZ2. This way, I can have more storage space and better protection against disk failures.
 
-In fact, the important thing to note is that RAIDZ1 can only tolerate the failure of one disk, while RAIDZ2 can tolerate the failure of two disks. This means that if I were to stick with RAIDZ1 and one of my disks were to fail, I would be at risk of losing all my data. By moving to RAIDZ2, I can have an extra layer of protection against disk failures.
+> [!NOTE]
+> RAIDZ1 can only tolerate the failure of one disk, while RAIDZ2 can tolerate the failure of two disks. This means that if I were to stick with RAIDZ1 and one of my disks were to fail, I would be at risk of losing all my data.
 
 > [!NOTE]
 > There is no in‑place conversion from RAIDZ1 to RAIDZ2; the supported approach is to backup the data, create a new pool with the new configuration and restore the data. However, this means to get twice the storage space needed for the data during the transition, which is not always feasible (and it really depends on the budget and available hardware).
+
+code example:
+
+```scala
+val oldPool = "raidz1_pool"
+val newPool = "raidz2_pool"
+// Step 1: Backup the data
+// This can be done using zfs send/receive or by copying the data to an external drive
+backupData(oldPool, "backup_location")
+```
 
 ## The workaround
 
