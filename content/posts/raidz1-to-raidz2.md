@@ -42,13 +42,13 @@ This plan allows the transition without needing to have ALL the disks for both R
 
 - Physically install the new disk and reboot if needed so TrueNAS sees it.
 - In TrueNAS UI, check _Storage › Disks_, identify the new drive (e.g. `da4` or `sdd`) by serial/model.
-- Create a temporary single‑disk pool (call it `temptank` for example):
+- Create a temporary single‑disk pool (call it `temp8t` for example):
   - _Storage › Pools › Add › Create new pool_.
   - Add only the new disk as a single‑disk vdev.
   - Disable any special/dedup vdevs; just a plain pool.
-  - Create datasets mirroring your current layout (same names) to simplify send/receive (e.g. `temptank/data` if your current pool has `tank/data`). This is optional but helps keep things organized.
+  - Create datasets mirroring your current layout (same names) to simplify send/receive (e.g. `temp8t/data` if your current pool has `tank/data`). This is optional but helps keep things organized.
 
-### 2. Copy data from `tank` RAIDZ1 to `temptank`
+### 2. Copy data from `tank` RAIDZ1 to `temp8t`
 
 Use ZFS send/receive so you preserve snapshots, permissions, and dataset properties.
 
@@ -61,10 +61,10 @@ Use ZFS send/receive so you preserve snapshots, permissions, and dataset propert
   zfs snapshot -r tank@pre-migration
   ```
 
-- Replicate everything to `temptank`:
+- Replicate everything to `temp8t`:
 
   ```bash
-  zfs send -R tank@pre-migration | zfs recv -F temptank
+  zfs send -R tank@pre-migration | zfs recv -F temp8t
   ```
 
   - `-R` sends all descendant datasets and properties.
@@ -74,15 +74,15 @@ Use ZFS send/receive so you preserve snapshots, permissions, and dataset propert
 
   ```bash
   zfs list tank
-  zfs list temptank
+  zfs list temp8t
   ```
 
   Spot‑check a few directories via SMB/NFS or shell to be sure the data and permissions look correct.
 
-- Run a scrub on `temptank` to ensure data integrity before proceeding:
+- Run a scrub on `temp8t` to ensure data integrity before proceeding:
   ```bash
-  zpool scrub temptank
-  zpool status temptank
+  zpool scrub temp8t
+  zpool status temp8t
   ```
   Wait until it completes cleanly.
 
@@ -153,3 +153,75 @@ Now you have a pseudo‑disk (loopX) of size 8TB acting as the fourth member.
   zpool list
   ```
   You now have your final RAIDZ2 layout, with one member being a fake disk. The pool should show as ONLINE.
+
+### 5. Copy data from temp8t › RAIDZ2 tank
+
+Again, using ZFS send/receive (or via GUI)
+
+- Snapshot the temporary pool:
+  ```bash
+  zfs snapshot -r temp8t@to-tank
+  ```
+- Send everything to tank:
+
+  ```bash
+  zfs send -R temp8t@to-tank | zfs recv -F tank
+  ```
+
+- Verify:
+
+  ```bash
+  zfs list tank
+  ```
+
+  Validate a few directories and permissions via UI/shell.
+  ​
+
+- Scrub `tank`:
+
+  ```bash
+  zpool scrub tank
+  zpool status tank
+  ```
+
+  Confirm no errors.
+  ​
+  At this stage, your data lives on the RAIDZ2 pool, but one vdev member is the fake disk.
+
+### 6. Destroy `temp8t` and replace the fake disk with the real 8TB
+
+Once you’re fully confident in the new tank contents:
+
+- Stop any remaining services using `temp8t` (if any).
+
+- Destroy `temp8t` via the UI (Storage › Pools › `temp8t` › Export/Disconnect › Destroy).
+
+- Identify the fake member in `zpool status tank` (it will show as /dev/loopX or /temp8t/fake/fake8t.img).
+
+- Replace fake with the real disk:
+
+  ```bash
+  zpool replace tank /dev/loopX /dev/sdX
+  ```
+
+  - Replace `/dev/sdX` with the new device.
+  - This triggers a resilver onto the real disk.
+
+- Monitor resilver:
+
+  ```bash
+  zpool status tank
+  ```
+
+  Wait until resilver completes and pool is ONLINE with all four real disks.
+  ​
+
+- After resilver:
+  - Detach and remove the fake file/loop device:
+
+    ```bash
+    losetup -d /dev/loopX
+    rm /temp8t/fake/fake8t.img
+    ```
+
+The pool is now a proper 4×8TB RAIDZ2 using only your four physical drives.
