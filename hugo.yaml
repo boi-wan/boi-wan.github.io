@@ -2,7 +2,7 @@ baseURL: https://example.org/
 languageCode: en-gb
 title: Paolo's blog
 theme: ["PaperMod"]
-#copyright: "© 2025 Paolo's blog. All rights reserved."
+#copyright: "© 2026 Paolo's blog. All rights reserved."
 
 enableRobotsTXT: true
 buildDrafts: false
@@ -44,7 +44,8 @@ params:
   ShowCodeCopyButtons: true
   ShowReadingTime: true
   ShowShareButtons: false
-  ShowToc: true
+  ShowToc: false
+  ShowDescription: true
 
   footer:
     text: "All rights reserved · Made in Sardinia with 💙"
