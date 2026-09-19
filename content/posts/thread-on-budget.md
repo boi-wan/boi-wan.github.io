@@ -2,7 +2,7 @@
 date: "2026-09-15"
 draft: false
 title: "Thread on a Budget"
-description: "How I got a standalone OpenThread Border Router talking to a network-attached Thread radio, without HAOS, without a Supervisor, and local-first."
+description: "How I got a standalone OpenThread Border Router talking to a network-attached Thread radio. Local-first."
 summary: "Wiring a SONOFF Dongle Max into a Dockerized Home Assistant"
 tags: ["Thread", "Home Assistant", "home lab"]
 ---
