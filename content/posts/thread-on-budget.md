@@ -1,13 +1,13 @@
 ---
-date: "2026-09-15"
+date: "2026-09-25"
 draft: false
 title: "Thread on a Budget"
-description: "How I got a standalone OpenThread Border Router talking to a network-attached Thread radio, without HAOS, without a Supervisor, and local-first."
+description: "How I got a standalone OpenThread Border Router talking to a network-attached Thread radio. Local-first."
 summary: "Wiring a SONOFF Dongle Max into a Dockerized Home Assistant"
 tags: ["Thread", "Home Assistant", "home lab"]
 ---
 
-This is the first post on this blog. It's about Thread, the low-power mesh protocol behind Matter, and how I got it working in my home lab without Home Assistant OS.
+This is the very first post on this blog. It's about Thread, the low-power mesh protocol behind Matter, and how I got it working in my home lab without Home Assistant OS.
 
 ## Context
 
@@ -19,9 +19,9 @@ Since my homelab's 8th-gen Intel NUC is running networking and a few other base 
 
 ## The hardware: SONOFF Dongle Max
 
-Reddit people usually recommend the _Home Assistant Connect ZBT-2_, which sits around 65 EUR. During Amazon Prime Day I found a good deal for the _SONOFF Dongle Max_ (EFR32MG24 + ESP32, PoE/Ethernet capable): 35 EUR was a good price for a Thread radio that can also work as a Matter controller. Reviews are positive and the chip is well supported in the OpenThread ecosystem. In addition, the Dongle Max is network-attached, so it can sit anywhere on the LAN and doesn't have to be physically next to any server.
+People around the Internet mostly recommend the _Home Assistant Connect ZBT-2_, which sits around 65 EUR. Not following the pricy recommendation, during Amazon Prime Day I found a good deal for the _SONOFF Dongle Max_: 35 EUR was a good price for a Thread radio that can also work as a Matter controller. Reviews are positive and the chip is well supported in the ecosystem. In addition, the dongle is network-attached, so it can sit anywhere on the LAN and doesn't have to be physically next to any of my server.
 
-That same network-attached design is also the source of most of the headache below.
+That same network-attached design is also the source of most of my headache below.
 
 ## Architecture: OTBR has to stand alone
 
@@ -31,20 +31,18 @@ With no HA Supervisor, OTBR runs as its own Docker service on the server, separa
 
 TLDR: it didn't work.
 
-OTBR does expect a serial device; it doesn't speak TCP to a radio. Since the Dongle Max is reachable over the network (with a static IP, usually TCP port 6638), the plan was:
+OTBR does expect a serial device; it doesn't speak TCP to a radio. Since the dongle is reachable over the network (with a static IP, usually TCP port 6638), the plan was:
 
 - run `socat` in one container to bridge the TCP connection to a pseudo-terminal
 - point OTBR's `OT_RCP_DEVICE` at that `pty` from a second container, sharing state through a bind-mounted `/tmp`
 
-It didn't work. The `pty` created by socat was visible by path from the OTBR container, but not usable as a character device. Each container gets its own private `devpts` instance, even when `/tmp` is shared, so a `pty` allocated in one container's mount namespace is not a valid device node in another, no matter if the symlink resolves.
-
-There is a fix (bind-mount the host's `/dev/pts` into both containers and run both privileged), but before going down that road, a better option showed up.
+It didn't work. The `pty` created by socat was visible by path from the OTBR container, but not usable as a character device.
 
 ### Second attempt: `bnutzer/otbr-tcp`
 
 TLDR: it worked, with some small config tweaks.
 
-This is a community image built exactly for this scenario: OTBR next to a Dockerized Home Assistant. The key difference is that socat and `otbr-agent` run **inside the same container**, so the devpts namespace problem does not exist. It also supports both a network-attached radio (`RCP_HOST`/`RCP_PORT`) and a local USB stick, so switching transport later is a one-variable change.
+This is a community image built exactly for covering this scenario: OTBR next to HA (on Docker). The key difference is that socat and `otbr-agent` run **inside the same container**, so the devpts namespace problem does not exist. It also supports both a network-attached radio (`RCP_HOST`/`RCP_PORT`) and a local USB stick, so switching transport later is a one-variable change.
 
 This is what I ended up running.
 
@@ -62,7 +60,7 @@ First boot ended in an infinite restart loop:
 socat[44] N read(5, ...): Input/output error (probably PTY closed)
 ```
 
-The RCP connection over TCP was actually fine. The fatal error came from a second, unrelated link. OTBR also opens a TREL (Thread Radio Encapsulation over IPv6) socket on the host's backbone interface, and the image defaults it to `eth0`. Debian 13 uses predictable interface naming, so that name doesn't exist on this server; the real interface is `eno1`. To confirm the right interface name, run:
+The RCP connection over TCP was actually fine. The fatal error came from a second, unrelated link. OTBR also opens a socket on the host's backbone interface, and the image defaults it to `eth0`: the real interface is `eno1`. To confirm the right interface name, run:
 
 ```shell
 ip -4 addr show | grep <host-ip>
@@ -83,7 +81,7 @@ Once TREL bound correctly, the agent came up and immediately hit:
 [CRIT]-WEB-----: Failed to start web server on 0.0.0.0:8080: Address already in use (errno 98)
 ```
 
-The server already has a full port map (Glance on 8080, Pi-hole on 8081, WUD on 3000, Dockhand on 3001, and so on). OTBR's web UI defaults to 8080 and its REST API to 8081, both already taken. I moved both, plus one extra variable so the bundled web UI knows where the REST API went:
+OTBR's web UI defaults to 8080 and its REST API to 8081, both already taken. I moved both, plus one extra variable so the bundled web UI knows where the REST API went:
 
 ```yaml
 environment:
@@ -94,26 +92,17 @@ environment:
 
 ### Bug 3: A one-letter typo in an environment variable
 
-The REST API has no authentication, so I wanted it bound to loopback only and set `OTBR_REST_LISTEN_ADDRESS: 127.0.0.1`. It silently did nothing. The image's Dockerfile has the answer:
+The REST API has no authentication, so I wanted it bound to loopback only and set `OTBR_REST_LISTEN_ADDRESS: 127.0.0.1`. It did nothing. The image's Dockerfile has the answer:
 
 ```shell
 ENV OTBR_REST_LISTEN_ADRESS="0.0.0.0"
 ```
 
-The variable name is misspelled in the image itself, missing a "D". I left a comment in the compose file, so a future edit doesn't quietly re-expose an unauthenticated REST API to the whole LAN.
-
-### One warning I ignore
-
-Every boot also logs:
-
-```shell
-ipset v6.34: Kernel support protocol versions 6-7 while userspace supports protocol versions 6-6
-The set with the given name does not exist
-```
-
-This is OTBR initializing the firewall rules for border routing: the set "does not exist" because OTBR is about to create it. Benign, safe to ignore.
+The variable name is misspelled in the image itself, missing a "D". Distracted devs.
 
 ## The working configuration
+
+See below a working Docker Compose configuration for the OTBR container.
 
 ```yaml
 services:
@@ -153,21 +142,16 @@ otbr-agent is ready.
 
 ## Wiring it into Home Assistant
 
-With OTBR healthy, the HA side is straightforward:
-
 1. **Settings → Devices & Services → Add Integration → Open Thread Border Router**, pointing at `http://127.0.0.1:8082`. HA and OTBR both run with `network_mode: host` on the same NUC, so loopback works between them.
 2. **Add the Thread integration** and explicitly create a new network, instead of letting anything auto-join. OTBR's TREL discovery had already picked up a neighboring Thread network (almost certainly a nearby Nest/Google Home border router), so check the Thread panel afterwards and confirm the network shown is actually yours.
 3. **Confirm the Matter integration** is present.
 
 ## Validate persistence before pairing devices
 
-Before pairing a single bulb, I restarted the `otbr` container and re-checked the Thread panel in HA. The point is to verify that `/var/lib/thread` really persists the Thread dataset across container recreates, and that the network identity is not quietly regenerated each time. Finding a broken volume mount now takes five minutes; finding it after six devices are paired to a network that no longer exists takes much more.
+Before pairing a single bulb, I restarted the `otbr` container and re-checked the Thread panel in HA. The point is to verify that `/var/lib/thread` really persists the Thread dataset across container recreates, and that the network identity is not quietly regenerated each time.
+Avoid discovering a broken volume mount later: finding a broken volume mount now takes five minutes; finding it after six devices paired to a network that no longer exists takes much more.
 
-It passed: same network, same credentials, after a full container restart.
-
-## What's next
-
-With a persistent border router in place, commissioning Matter devices is easy and local-first.
+At the end: same network, same credentials, after a full container restart.
 
 ## Links
 
