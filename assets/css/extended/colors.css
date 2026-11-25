@@ -1,0 +1,50 @@
+/* Subtle tinted surfaces and Mediterranean blue accent */
+:root {
+  --theme: #f8fafc;
+  --entry: #ffffff;
+  --border: #e2e8f0;
+  --code-bg: #f1f5f9;
+  --accent: #1d6fa5;
+  --accent-hover: #155682;
+}
+
+:root[data-theme="dark"] {
+  --theme: #141820;
+  --entry: #1c222e;
+  --border: #2a3342;
+  --code-block-bg: #1a202c;
+  --code-bg: #232b38;
+  --accent: #5ca8dc;
+  --accent-hover: #82bfe8;
+}
+
+.list {
+  background: var(--theme);
+}
+
+/* Accent highlights */
+.post-content a {
+  color: var(--accent);
+  box-shadow: 0 1px 0 var(--accent);
+  transition: color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.post-content a:hover {
+  color: var(--accent-hover);
+  box-shadow: 0 2px 0 var(--accent-hover);
+}
+
+.post-content blockquote {
+  border-inline-start: 3px solid var(--accent);
+}
+
+#menu a:hover,
+.social-icons a:hover,
+.theme-toggle:hover,
+.paginav a:hover {
+  color: var(--accent);
+}
+
+.menu .active {
+  text-decoration-color: var(--accent);
+}
