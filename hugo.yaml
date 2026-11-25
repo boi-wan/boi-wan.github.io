@@ -44,7 +44,7 @@ params:
   ShowCodeCopyButtons: true
   ShowReadingTime: true
   ShowShareButtons: false
-  ShowToc: false
+  ShowToc: true
   ShowDescription: true
 
   footer:
@@ -73,3 +73,7 @@ menu:
       name: Posts
       url: /posts/
       weight: 10
+    - identifier: tags
+      name: Tags
+      url: /tags/
+      weight: 20
