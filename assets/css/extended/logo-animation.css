@@ -1,11 +1,11 @@
 /* Typing animation for logo */
 .typed-out {
   overflow: hidden;
-  border-right: 0.15em solid grey;
+  border-right: 0.15em solid transparent;
   white-space: nowrap;
   width: fit-content;
   max-width: 0;
-  animation: typing 1.5s steps(13, end) forwards, blinking 1.05s infinite;
+  animation: typing 1.5s steps(13, end) forwards, blinking 0.8s 4;
   padding-right: 0.1em;
 }
 
@@ -19,10 +19,11 @@
 }
 
 @keyframes blinking {
-  from {
+  0%,
+  100% {
     border-color: transparent;
   }
-  to {
-    border-color: grey;
+  50% {
+    border-color: var(--accent);
   }
 }

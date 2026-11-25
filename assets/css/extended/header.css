@@ -1,7 +1,14 @@
 /* Header layout */
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   margin: auto;
   max-width: calc(var(--main-width) + var(--gap) * 3);
+  background: color-mix(in srgb, var(--theme) 85%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
 }
 
 .logo {
