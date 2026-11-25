@@ -8,3 +8,8 @@
   position: relative;
   line-height: normal;
 }
+
+.menu-theme-toggle {
+  display: flex;
+  align-items: center;
+}

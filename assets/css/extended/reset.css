@@ -1,6 +1,6 @@
 /* Typography */
 body {
-  font-family: "Merriweather", Georgia, "Times New Roman", serif;
+  font-family: "Lora", Georgia, "Times New Roman", serif;
   font-size: 18px;
   line-height: 1.6;
   word-break: break-word;
@@ -9,16 +9,16 @@ body {
 
 /* content */
 .first-entry .entry-header h1 {
-  font-family: "Merriweather", Georgia, serif;
+  font-family: "Lora", Georgia, serif;
 }
 .first-entry .entry-content {
-  font-family: "Merriweather", Georgia, serif;
+  font-family: "Lora", Georgia, serif;
   font-size: 1.1rem;
   line-height: 1.8rem;
 }
 
 .post-content {
-  font-family: "Merriweather", Georgia, serif;
+  font-family: "Lora", Georgia, serif;
   font-size: medium;
   line-height: 1.8rem;
   font-weight: lighter;
