@@ -1,5 +1,5 @@
 baseURL: https://blog.paoloboi.com/
-languageCode: en-gb
+locale: en-gb
 title: Paolo's blog
 theme: ["PaperMod"]
 #copyright: "© 2026 Paolo's blog. All rights reserved."
